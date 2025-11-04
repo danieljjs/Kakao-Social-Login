@@ -72,7 +72,7 @@ public class CustomOAuth2UserService
 	}
 
 	private Member saveOrUpdate(OAuthAttributes attributes) {
-		Member userEntity = memberRepository.findByOauthId(
+		Member userEntity = memberRepository.findByEmail(
 				attributes.getSocialProvider() + "_" + attributes.getSocialId())
 			.map(entity -> {
 				log.info("기존 사용자 발견 - ID: {}, Email: {}", entity.getId(), entity.getEmail());

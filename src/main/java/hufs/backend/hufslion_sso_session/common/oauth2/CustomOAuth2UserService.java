@@ -72,7 +72,12 @@ public class CustomOAuth2UserService
 	}
 
 	private Member saveOrUpdate(OAuthAttributes attributes) {
-		Member userEntity = memberRepository.findByEmail(attributes.getEmail())
+        String email = attributes.getEmail();
+        if (email == null || email.isEmpty()) {
+            log.error("OAuth 제공자로부터 이메일을 받지 못했습니다. provider: {}", attributes.getSocialProvider());
+            throw new IllegalArgumentException("이메일 정보가 필요합니다. 동의를 확인해 주세요.");
+        }
+		Member userEntity = memberRepository.findByEmail(email)
 			.map(entity -> {
 				log.info("기존 사용자 발견 - ID: {}, Email: {}", entity.getId(), entity.getEmail());
 				return entity.update(attributes.getName());
